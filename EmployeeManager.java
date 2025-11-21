@@ -7,6 +7,7 @@ public class EmployeeManager {
 
     public static void main(String[] args) {
 
+        // Check if user provided an argument
         if (args.length == 0) {
             System.out.println("Error: Provide an argument (l, s, +, ?, c, u, d).");
             return;
@@ -14,6 +15,7 @@ public class EmployeeManager {
 
         String command = args[0];
 
+        // List all employees
         if (command.equals(Constants.LIST_EMPLOYEES)) {
             System.out.println("Loading data ...");
             String[] employees = readEmployees();
@@ -24,6 +26,7 @@ public class EmployeeManager {
             }
             System.out.println("Data Loaded.");
 
+        // Show a random employee
         } else if (command.equals(Constants.SHOW_RANDOM_EMPLOYEE)) {
             System.out.println("Loading data ...");
             String[] employees = readEmployees();
@@ -34,28 +37,28 @@ public class EmployeeManager {
             }
             System.out.println("Data Loaded.");
 
+        // Add a new employee
         } else if (command.startsWith(Constants.ADD_EMPLOYEE)) {
             System.out.println("Loading data ...");
             String newEmployee = command.substring(1);
             appendToFile(newEmployee);
             System.out.println("Data Loaded.");
 
+        // Find an employee
         } else if (command.startsWith(Constants.FIND_EMPLOYEE)) {
             System.out.println("Loading data ...");
             String[] employees = readEmployees();
-            
             if (employees != null) {
                 String searchName = command.substring(1);
-
                 if (Arrays.asList(employees).contains(searchName)) {
                     System.out.println("Employee found: " + searchName);
                 } else {
                     System.out.println("Employee not found: " + searchName);
                 }
-
             }
-
             System.out.println("Data Loaded.");
+
+        // Count employees/words
         } else if (command.equals(Constants.COUNT_EMPLOYEES)) {
             System.out.println("Loading data ...");
             String[] employees = readEmployees();
@@ -66,15 +69,14 @@ public class EmployeeManager {
                                        .count();
                 System.out.println(wordCount + " word(s) found " + allText.length());
             }
-
             System.out.println("Data Loaded.");
 
+        // Update employee - no name provided
         } else if (command.equals(Constants.UPDATE_EMPLOYEE)) {
-
             System.out.println("Error: You must provide a name to update.");
 
+        // Update employee - with name
         } else if (command.startsWith(Constants.UPDATE_EMPLOYEE)) {
-            
             System.out.println("Loading data ...");
             String nameToUpdate = command.substring(1).trim();
             String[] employees = readEmployees();
@@ -82,7 +84,7 @@ public class EmployeeManager {
                 boolean updated = false;
                 for (int i = 0; i < employees.length; i++) {
                     if (employees[i].equals(nameToUpdate)) {
-                        employees[i] = "Updated"; // or a new name if desired
+                        employees[i] = "Updated"; // Replace name
                         updated = true;
                     }
                 }
@@ -93,13 +95,13 @@ public class EmployeeManager {
                     System.out.println("Employee not found: " + nameToUpdate);
                 }
             }
-        }
-         else if (command.equals(Constants.DELETE_EMPLOYEE)) {
 
+        // Delete employee - no name provided
+        } else if (command.equals(Constants.DELETE_EMPLOYEE)) {
             System.out.println("Error: You must provide a name to delete.");
 
-        } 
-        else if (command.startsWith(Constants.DELETE_EMPLOYEE)) {
+        // Delete employee - with name
+        } else if (command.startsWith(Constants.DELETE_EMPLOYEE)) {
             String nameToDelete = command.substring(1).trim();
             String[] employees = readEmployees();
             if (employees != null) {
@@ -111,14 +113,15 @@ public class EmployeeManager {
                     System.out.println("Employee not found to delete: " + nameToDelete);
                 }
             }
-        }
-        else {
-        
+
+        // Invalid argument
+        } else {
             System.out.println("Error: Invalid argument \"" + command + "\" provided.");
             System.out.println("Valid arguments are: l, s, +, ?, c, u, d.");
         }
     }
 
+    // Read all employees from file
     private static String[] readEmployees() {
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
             String line = reader.readLine();
@@ -130,8 +133,8 @@ public class EmployeeManager {
         }
         return null;
     }
-    
 
+    // Overwrite file with updated employee list
     private static void writeToFile(String[] employees) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME))) {
             writer.write(String.join(",", employees));
@@ -140,6 +143,7 @@ public class EmployeeManager {
         }
     }
 
+    // Append a new employee 
     private static void appendToFile(String employee) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true))) {
             writer.write("," + employee);
