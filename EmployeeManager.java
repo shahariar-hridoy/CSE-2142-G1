@@ -56,30 +56,19 @@ public class EmployeeManager {
             }
 
             System.out.println("Data Loaded.");
-        }
-         else if (command.contains(Constants.COUNT_EMPLOYEES)) {
+        } else if (command.contains(Constants.COUNT_EMPLOYEES)) {
             System.out.println("Loading data ...");
             String[] employees = readEmployees();
             if (employees != null) {
                 String allText = String.join(",", employees);
-                char[] characters = allText.toCharArray();
-                boolean inWord = false;
-                int wordCount = 0;
-                for (char c : characters) {
-                    if (c == ' ') {
-                        if (!inWord) {
-                            wordCount++;
-                            inWord = true;
-                        } else {
-                            inWord = false;
-                        }
-                    }
-                }
-                System.out.println(wordCount + " word(s) found " + characters.length);
+                long wordCount = Arrays.stream(allText.split("\\s+"))
+                                       .filter(s -> !s.isEmpty())
+                                       .count();
+                System.out.println(wordCount + " word(s) found " + allText.length());
             }
             System.out.println("Data Loaded.");
-
-        } else if (command.startsWith(Constants.UPDATE_EMPLOYEE)) {
+        }
+         else if (command.startsWith(Constants.UPDATE_EMPLOYEE)) {
             System.out.println("Loading data ...");
             String[] employees = readEmployees();
             if (employees != null) {
