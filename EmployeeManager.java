@@ -14,7 +14,7 @@ public class EmployeeManager {
 
         String command = args[0];
 
-        if (command.equals("l")) {
+        if (command.equals(Constants.LIST_EMPLOYEES)) {
             System.out.println("Loading data ...");
             String[] employees = readEmployees();
             if (employees != null) {
@@ -24,7 +24,7 @@ public class EmployeeManager {
             }
             System.out.println("Data Loaded.");
 
-        } else if (command.equals("s")) {
+        } else if (command.equals(Constants.SHOW_RANDOM_EMPLOYEE)) {
             System.out.println("Loading data ...");
             String[] employees = readEmployees();
             if (employees != null) {
@@ -34,13 +34,13 @@ public class EmployeeManager {
             }
             System.out.println("Data Loaded.");
 
-        } else if (command.startsWith("+")) {
+        } else if (command.startsWith(Constants.ADD_EMPLOYEE)) {
             System.out.println("Loading data ...");
             String newEmployee = command.substring(1);
             appendToFile(newEmployee);
             System.out.println("Data Loaded.");
 
-        } else if (command.startsWith("?")) {
+        } else if (command.startsWith(Constants.FIND_EMPLOYEE)) {
             System.out.println("Loading data ...");
             String[] employees = readEmployees();
             if (employees != null) {
@@ -56,7 +56,7 @@ public class EmployeeManager {
             }
             System.out.println("Data Loaded.");
 
-        } else if (command.contains("c")) {
+        } else if (command.contains(Constants.COUNT_EMPLOYEES)) {
             System.out.println("Loading data ...");
             String[] employees = readEmployees();
             if (employees != null) {
@@ -78,7 +78,7 @@ public class EmployeeManager {
             }
             System.out.println("Data Loaded.");
 
-        } else if (command.startsWith("u")) {
+        } else if (command.startsWith(Constants.UPDATE_EMPLOYEE)) {
             System.out.println("Loading data ...");
             String[] employees = readEmployees();
             if (employees != null) {
@@ -92,7 +92,7 @@ public class EmployeeManager {
             }
             System.out.println("Data Updated.");
 
-        } else if (command.contains("d")) {
+        } else if (command.contains(Constants.DELETE_EMPLOYEE)) {
             System.out.println("Loading data ...");
             String[] employees = readEmployees();
             if (employees != null) {
@@ -105,7 +105,6 @@ public class EmployeeManager {
         }
     }
 
-    // Reads employees.txt and returns array of employee names
     private static String[] readEmployees() {
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
             String line = reader.readLine();
