@@ -56,7 +56,7 @@ public class EmployeeManager {
             }
 
             System.out.println("Data Loaded.");
-        } else if (command.contains(Constants.COUNT_EMPLOYEES)) {
+        } else if (command.equals(Constants.COUNT_EMPLOYEES)) {
             System.out.println("Loading data ...");
             String[] employees = readEmployees();
             if (employees != null) {
@@ -66,32 +66,56 @@ public class EmployeeManager {
                                        .count();
                 System.out.println(wordCount + " word(s) found " + allText.length());
             }
+
             System.out.println("Data Loaded.");
-        }
-         else if (command.startsWith(Constants.UPDATE_EMPLOYEE)) {
+
+        } else if (command.equals(Constants.UPDATE_EMPLOYEE)) {
+
+            System.out.println("Error: You must provide a name to update.");
+
+        } else if (command.startsWith(Constants.UPDATE_EMPLOYEE)) {
+            
             System.out.println("Loading data ...");
+            String nameToUpdate = command.substring(1).trim();
             String[] employees = readEmployees();
             if (employees != null) {
-                String nameToUpdate = command.substring(1);
+                boolean updated = false;
                 for (int i = 0; i < employees.length; i++) {
                     if (employees[i].equals(nameToUpdate)) {
-                        employees[i] = "Updated";
+                        employees[i] = "Updated"; // or a new name if desired
+                        updated = true;
                     }
                 }
                 writeToFile(employees);
+                if(updated) {
+                    System.out.println("Employee updated: " + nameToUpdate);
+                } else {
+                    System.out.println("Employee not found: " + nameToUpdate);
+                }
             }
-            System.out.println("Data Updated.");
+        }
+         else if (command.equals(Constants.DELETE_EMPLOYEE)) {
 
-        } else if (command.contains(Constants.DELETE_EMPLOYEE)) {
-            System.out.println("Loading data ...");
+            System.out.println("Error: You must provide a name to delete.");
+
+        } 
+        else if (command.startsWith(Constants.DELETE_EMPLOYEE)) {
+            String nameToDelete = command.substring(1).trim();
             String[] employees = readEmployees();
             if (employees != null) {
-                String nameToDelete = command.substring(1);
                 List<String> employeeList = new ArrayList<>(Arrays.asList(employees));
-                employeeList.remove(nameToDelete);
-                writeToFile(employeeList.toArray(new String[0]));
+                if(employeeList.remove(nameToDelete)) {
+                    writeToFile(employeeList.toArray(new String[0]));
+                    System.out.println("Employee deleted: " + nameToDelete);
+                } else {
+                    System.out.println("Employee not found to delete: " + nameToDelete);
+                }
             }
-            System.out.println("Data Deleted.");
+        }
+        else {
+        
+            System.out.println("Error: Invalid argument \"" + command + "\" provided.");
+            System.out.println("Valid arguments are: l, s, +, ?, c, u, d.");
         }
     }
 
@@ -106,6 +130,7 @@ public class EmployeeManager {
         }
         return null;
     }
+    
 
     private static void writeToFile(String[] employees) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME))) {
